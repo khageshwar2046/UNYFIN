@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<!--
+
+   -->
+<html lang="en">
+   <head>
+      <!-- Basic Page Needs
+         ================================================== -->
+      <meta charset="utf-8">
+      <title>Unyfin</title>
+      <!-- Mobile Specific Metas
+         ================================================== -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="description" content="UNYFIN">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+      <meta name="author" content="UNYFIN">
+      <meta name="generator" content="UNYFIN">
+      <!-- bootstrap -->
+      <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+      <!-- Animate -->
+      <link rel="stylesheet" href="plugins/animate-css/animate.css">
+      <!-- Icon Font css -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="plugins/fontawesome/css/all.css">
+      <link rel="stylesheet" href="plugins/fonts/Pe-icon-7-stroke.css">
+      <!-- Unyfin icon Css -->
+      <link rel="stylesheet" href="plugins/unyfinthemes-icon/css/unyfin-icons.css">
+      <!-- Slick Carousel CSS -->
+      <link rel="stylesheet" href="plugins/slick-carousel/slick/slick.css">
+      <link rel="stylesheet" href="plugins/slick-carousel/slick/slick-theme.css">
+      <!-- Main Stylesheet -->
+      <link rel="stylesheet" href="css/style.css">
+      <!--Favicon-->
+      <link rel="icon" href="images/favicon.png" type="image/x-icon">
+   </head>
+   <script type="text/javascript">
+      function validate(){
+    	  var name = $('#name').val();
+          if(name == ""){
+          	alert("please Enter name");
+        		return false;
+          }
+          var loanAmount = $('#loanAmount').val();
+          if(loanAmount == ""){
+          	alert("please Enter loanAmount");
+        		return false;
+          }
+         var mobileNumber = $('#MobileNumber').val();
+         if(mobileNumber == ""){
+         	alert("please Enter Mobile Number");
+       		return false;
+         }
+         var EmailID = $('#EmailId').val();
+         if(EmailID == ""){
+         	alert("please Enter EmailID");
+       		return false;
+         }
+      	//Pancard validation
+      	var panVal = $('#pan').val();
+      	if(panVal != ""){
+	      	var regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+	      	if(!regpan.test(panVal)){
+	      		alert("Invalid Pancard");
+	      		return false;
+	      	} 
+      	}
+      	//DOB validation
+      	var dob = $("#dob").val();
+      	var dobFormat = parseDateString(dob, 'MM/dd/yyyy');
+      	dobFormat = new Date(dobFormat);
+      	var d = new Date();
+      	d.setDate(d.getDate()-6570);//Minus 18 years
+      	if(dobFormat > d){
+      		alert("DOB must be 18+ and above");
+      		return false;
+      	}
+      	//Pincode validation
+      	var pincode = $("#pin").val();
+      	var regpin = /([1-9]{1}[0-9]{5}|[1-9]{1}[0-9]{3}\\s[0-9]{3})/;
+      	if(!regpin.test(pincode)){
+      		alert("Invalid Pincode");
+      		return false;
+      	}
+      	var existingCardBank = $("#ExistingCardBank").val();
+      	//Money Validation
+      	var creditLimit = $("#CreditLimit").val();
+      	if(creditLimit != ""){
+      		if(existingCardBank === ""){
+      			alert("Select Existing Bank ");
+      		}
+      	}
+    	if(creditLimit != ""){
+	      	var regMoney = /^(?:0|[1-9]\d*)(?:\.(?!.*000)\d+)?$/;
+	      	if(!regMoney.test(creditLimit)){
+	      		alert("Invalid Credit Limit ");
+	      		return false;
+	      	}
+    	}
+      	//Card Holding date validation
+      	var holdingCardSince = $("#HoldingCardSince").val();
+      	var holdingCardSinceFormat = parseDateString(holdingCardSince, 'MM/dd/yyyy');
+      	holdingCardSinceFormat = new Date(holdingCardSinceFormat);
+      	var d = new Date();
+      	if(holdingCardSinceFormat > d){
+      		alert("Holding card since must be below today's date");
+      		return false;
+      	}
+      	var html = "<html><body><b>NAME: "+$("#name").val()+"</b></br>";
+      	 	html += "<b>PAN: "+$('#pan').val()+"</b></br>";
+      	 	html += "<b>DOB: "+$("#dob").val()+"</b></br>";
+      	 	html += "<b>PIN CODE : "+$("#pin").val()+"</b></br>";
+      	 	html += "<b>EXISTING CARD ISSUED BY BANK: "+$('#ExistingCardBank').val()+"</b></br>";
+      	 	html += "<b>EXISTING CREDIT LIMIT: "+$("#CreditLimit").val()+"</b></br>";
+      	 	html += "<b>HOLDING CARD SINCE: "+$("#HoldingCardSince").val()+"</b></br>";
+      	 	html += "</body></html>"
+      		Email.send({
+      				Host: "smtp.elasticemail.com",
+      				Username : "testmailmellow@gmail.com",
+      				Password : "3D488FE39A34E0038DD64A7C3172810AEF24",
+      				port : "2525",
+      				To : 'saleslead@unyfin.com',
+      				From : "testmailmellow@gmail.com",
+      				Subject : "Applied For Credit Card",
+      				Body : html,
+      			})
+      			.then(function(message){
+      				alert(message)
+      			});
+      }
+   </script>
+   <body id="top-header">
+      <!-- LOADER TEMPLATE -->
+      <div id="page-loader">
+         <div class="loader-icon fa fa-spin colored-border"></div>
+      </div>
+      <!-- /LOADER TEMPLATE -->
+      <div class="top-bar bg-dark py-2 py-md-0" id="top-bar">
+         <div class="container">
+            <div class="row align-items-center">
+               <div class="col-lg-6 col-md-6">
+                  <div class="top-bar-left text-white text-md-left text-sm-center">
+                     <i class="fas fa-map-marker-alt"></i>
+                     <span class="ml-2"> C 80 B, 2nd Floor, Sector 08, Noida, Uttar Pradesh - 201301</span>
+                  </div>
+               </div>
+               <div class="col-lg-4 ml-lg-auto col-md-6">
+                  <ul class="list-inline list-unstyled header-socials text-md-right text-sm-center">
+                     <li class="list-inline-item"><a href="#!"> <i class="fab fa-facebook-f"></i></a></li>
+                     <li class="list-inline-item"><a href="#!"> <i class="fab fa-twitter"></i></a></li>
+                     <li class="list-inline-item"><a href="#!"> <i class="fab fa-pinterest-p"></i></a></li>
+                     <li class="list-inline-item"><a href="#!"> <i class="fab fa-linkedin"></i></a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="logo-bar d-none d-md-block d-lg-block bg-light">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-2">
+                  <div class="logo d-none d-lg-block">
+                     <!-- Brand -->
+                     <a class="navbar-brand js-scroll-trigger" href="index.html">
+                        <h2><img class="logo logo-light" alt="UnyFin" src="images/logo_medium.png" /></h2>
+                     </a>
+                  </div>
+               </div>
+               <div class="col-lg-8 justify-content-end ml-lg-auto d-flex col-12 col-md-12 justify-content-md-center">
+                  <div class="top-info-block d-inline-flex">
+                     <div class="icon-block">
+                        <i class="ti-mobile"></i>
+                     </div>
+                     <div class="info-block">
+                        <h5 class="font-weight-500">7290 87 88 89</h5>
+                        <p>Call Free</p>
+                     </div>
+                  </div>
+                  <div class="top-info-block d-inline-flex">
+                     <div class="icon-block">
+                        <i class="ti-email"></i>
+                     </div>
+                     <div class="info-block">
+                        <h5 class="font-weight-500">reachus@unyfin.com</h5>
+                        <p>Email Us</p>
+                     </div>
+                  </div>
+                  <div class="top-info-block d-inline-flex">
+                     <div class="icon-block">
+                        <i class="ti-time"></i>
+                     </div>
+                     <div class="info-block">
+                        <h5 class="font-weight-500">Mon-Sat 9:00-12.00 </h5>
+                        <p>Sunday Closed</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- NAVBAR
+         ================================================= -->
+      <div class="main-navigation" id="mainmenu-area">
+         <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary main-nav navbar-togglable rounded-radius">
+               <a class="navbar-brand d-lg-none d-block" href="index.html">
+                  <h4 class="h3 mb-0">UNYFIN</h4>
+               </a>
+               <!-- Toggler -->
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                  aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="fa fa-bars"></span>
+               </button>
+               <!-- Collapse -->
+               <div class="collapse navbar-collapse has-dropdown" id="navbarCollapse">
+                  <!-- Links -->
+                  <ul class="navbar-nav ">
+                     <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="index.html" id="navbarWelcome" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                        Home
+                        </a>
+                     </li>
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#!" id="navbarWelcome" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                        Products
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarWelcome">
+                           <li><a class="dropdown-item" href="PERSONALLOAN.html">Personal loans</a></li>
+                           <li class="dropdown dropdown-submenu dropright">
+                              <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Credit cards</a>
+                              <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SBI</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="SBICARDSIMPLYSAVE.html">SBI Simply Save Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBIPRIMECARD.html">SBI Prime Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBISIMPLYCLICK.html">SBI Simply Click Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBIELITECARD.html">SBI Elite Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBIIRCTCCARD.html">SBI IRCTC Platinum Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">YES BANK</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="YESBANKPROSPERITYPLUS.html">Yes Prosperity Rewards Plus Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="YESPROSPERITYEDGECREDIT.html">Yes Prosperity Edge Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="YESBANKPREMIA.html">YES Premia Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">AXIS</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="AXISNEO.html">Axis Bank Neo Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="AXIXMYZONE.html">Axis Bank MY ZONE Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="AXISSELECT.html">Axis Bank SELECT Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="AXIXINDIANOIL.html">IndianOil Axis Bank Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CITI</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="CITIBANKREWARDS.html">Citi Rewards Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="CITICASHBACKCARD.html">Citi Cashback Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="CITIINDIANOILCARD.html">Indianoil Citi Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="CITIPRESTIGECARD.html">Citi Prestige Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">INDUSIND</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="INDUSIND.html">Indusind Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="EazyDinerIndusInd.html">Indusind EazyDiner Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                           <li><a class="dropdown-item" href="card.html">Line of Card</a></li>
+                           <li><a class="dropdown-item" href="card.html">Business loans</a></li>
+                           <li><a class="dropdown-item" href="card.html">Home loans</a></li>
+                           <li><a class="dropdown-item" href="LOANAGAINSTPROPERTY.html">Loan against property</a></li>
+                           <li><a class="dropdown-item" href="card.html">New Car loans</a></li>
+                           <li><a class="dropdown-item" href="card.html">Used car loans</a></li>
+                        </ul>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="calculator.html" class="nav-link js-scroll-trigger">
+                        Calculator
+                        </a>
+                     </li>
+					 <li class="nav-item ">
+                        <a href="Eligibility.html" class="nav-link js-scroll-trigger">
+                        Customer Eligibility
+                        </a>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="service.html" class="nav-link js-scroll-trigger">
+                        About
+                        </a>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="service.html" class="nav-link js-scroll-trigger">
+                        Services
+                        </a>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="contact.html" class="nav-link">
+                        Contact
+                        </a>
+                     </li>
+                  </ul>
+                  <ul class="ml-lg-auto list-unstyled m-0">
+                     <li><a href="Quote.html" class="btn btn-white btn-circled">Get a quote</a></li>
+                  </ul>
+               </div>
+               <!-- / .navbar-collapse -->
+            </nav>
+         </div>
+         <!-- / .container -->
+      </div>
+      <!-- HERO
+         ================================================== -->
+      <section class="banner-area py-7">
+         <!-- Content -->
+         <div class="container">
+            <div class="row  align-items-center">
+               <div class="col-md-12 col-lg-7 text-center text-lg-left">
+                  <div class="main-banner">
+                     <!-- Contacts Form -->
+                     <form class="contact_form">
+                        <div class="row">
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 name
+                                 <span class="text-danger">*</span>
+                                 </label>
+                                 <div class="input-group">
+                                    <input class="form-control" name="name" id="name" required="" placeholder="John Doe" type="text">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                Mobile Number
+                                <span class="text-danger">*</span>
+                                 </label>
+                                 <div class="input-group ">
+                                    <input class="form-control" name="MobileNumber" id="MobileNumber" placeholder="MobileNumber" type="number">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 EmailId
+                                 <span class="text-danger">*</span>
+                                 </label>
+                                 <div class="input-group ">
+                                    <input class="form-control" name="EmailId" id="EmailId" placeholder="EmailId" type="text">
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 pan
+                                 <span class="text-danger">*</span>
+                                 </label>
+                                 <div class="input-group ">
+                                    <input class="form-control" name="pan" id="pan" required="" placeholder="" type="text">
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->
+                           <div class="w-100"></div>
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 dob
+                                 <span class="text-danger">*</span>
+                                 </label>
+                                 <div class="input-group">
+                                    <input class="form-control" name="dob" id="dob" required="" placeholder="DOB" type="date">
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 pin code
+                                 <span class="text-danger">*</span>
+                                 </label>
+                                 <div class="input-group ">
+                                    <input class="form-control" id="pin" name="pin" required="" placeholder="" type="text">
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 Existing Card Issued by Bank
+                                 </label>
+                                 <div class="input-group ">
+                                    <select name="ExistingCardBank" id="ExistingCardBank">
+                                       <option selected="selected" value="0">--Select --</option>
+                                       <option value="ALLAHABAD BANK">ALLAHABAD BANK </option>
+                                       <option value="ANDHRA BANK">ANDHRA BANK</option>
+                                       <option value="AXIS BANK">AXIS BANK</option>
+                                       <option value="STATE BANK OF INDIA">STATE BANK OF INDIA</option>
+                                       <option value="BANK OF BARODA">BANK OF BARODA</option>
+                                       <option value="UCO BANK">UCO BANK</option>
+                                       <option value="UNION BANK OF INDIA">UNION BANK OF INDIA</option>
+                                       <option value="BANK OF INDIA">BANK OF INDIA</option>
+                                       <option value="BANDHAN BANK LIMITED">BANDHAN BANK LIMITED</option>
+                                       <option value="CANARA BANK">CANARA BANK</option>
+                                       <option value="GRAMIN VIKASH BANK">GRAMIN VIKASH BANK</option>
+                                       <option value="CORPORATION BANK">CORPORATION BANK</option>
+                                       <option value="INDIAN BANK">INDIAN BANK</option>
+                                       <option value="INDIAN OVERSEAS BANK">INDIAN OVERSEAS BANK</option>
+                                       <option value="ORIENTAL BANK OF COMMERCE">ORIENTAL BANK OF COMMERCE</option>
+                                       <option value="PUNJAB AND SIND BANK">PUNJAB AND SIND BANK</option>
+                                       <option value="PUNJAB NATIONAL BANK">PUNJAB NATIONAL BANK</option>
+                                       <option value="RESERVE BANK OF INDIA">RESERVE BANK OF INDIA</option>
+                                       <option value="SOUTH INDIAN BANK">SOUTH INDIAN BANK</option>
+                                       <option value="UNITED BANK OF INDIA">UNITED BANK OF INDIA</option>
+                                       <option value="CENTRAL BANK OF INDIA">CENTRAL BANK OF INDIA</option>
+                                       <option value="VIJAYA BANK">VIJAYA BANK</option>
+                                       <option value="DENA BANK">DENA BANK</option>
+                                       <option value="BHARATIYA MAHILA BANK LIMITED">BHARATIYA MAHILA BANK LIMITED</option>
+                                       <option value="FEDERAL BANK LTD">FEDERAL BANK LTD </option>
+                                       <option value="HDFC BANK LTD">HDFC BANK LTD</option>
+                                       <option value="ICICI BANK LTD">ICICI BANK LTD</option>
+                                       <option value="IDBI BANK LTD">IDBI BANK LTD</option>
+                                       <option value="PAYTM BANK">PAYTM BANK</option>
+                                       <option value="FINO PAYMENT BANK">FINO PAYMENT BANK</option>
+                                       <option value="INDUSIND BANK LTD">INDUSIND BANK LTD</option>
+                                       <option value="KARNATAKA BANK LTD">KARNATAKA BANK LTD</option>
+                                       <option value="KOTAK MAHINDRA BANK">KOTAK MAHINDRA BANK</option>
+                                       <option value="YES BANK LTD">YES BANK LTD</option>
+                                       <option value="SYNDICATE BANK">SYNDICATE BANK</option>
+                                       <option value="BANK OF INDIA">BANK OF INDIA</option>
+                                       <option value="BANK OF MAHARASHTRA">BANK OF MAHARASHTRA</option>
+                                    </select>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->      
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 Existing Credit Limit
+                                 </label>
+                                 <div class="input-group ">
+                                    <input class="form-control" id="CreditLimit" name="CreditLimit" placeholder="" type="text">
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->                            
+                           <!-- Input -->
+                           <div class="col-sm-6 mb-6">
+                              <div class="form-group">
+                                 <label class="h6 small d-block text-uppercase">
+                                 Holding Card Since
+                                 </label>
+                                 <div class="input-group ">
+                                    <input class="form-control" name="HoldingCardSince" id="HoldingCardSince" placeholder="DOB" type="date">
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- End Input -->                            
+                        </div>
+                        <div class="">
+                           <input type="button" class="btn btn-primary btn-circled" value="Apply" onclick="validate();">
+                           <p class="small pt-3">We'll get back to you in 1 business day.</p>
+                        </div>
+                     </form>
+                     <!-- End Contacts Form -->
+                  </div>
+               </div>
+               <div class="col-lg-5 d-none d-lg-block">
+                  <div class="banner-img-block">
+                     <img src="images/banner-img-5.png" alt="banner-img" class="img-fluid">
+                  </div>
+               </div>
+            </div>
+            <!-- / .row -->
+         </div>
+         <!-- / .container -->
+      </section>
+      <!--Content -->
+      <div class="container">
+         <div class="row justify-content-start">
+            <div class="col-lg-4 col-sm-12">
+               <div class="footer-widget">
+                  <!-- Brand -->
+                  <a href="index.html" class="footer-brand text-white">
+                  UNYFIN
+                  </a>
+                  <p>Bringing you the Best Products from Top Banks &amp; Financial Institutions</p>
+               </div>
+            </div>
+            <div class="col-lg-3 ml-lg-auto col-sm-12">
+               <div class="footer-widget">
+                  <h3>Account</h3>
+                  <!-- Links -->
+                  <ul class="footer-links ">
+                     <li>
+                        <a href="#!">
+                        Terms and conditions
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#!">
+                        Privacy policy
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#!">
+                        Help and support
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#!">
+                        Frequently Asked Question
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-lg-2 col-sm-6">
+               <div class="footer-widget">
+                  <h3>About</h3>
+                  <!-- Links -->
+                  <ul class="footer-links">
+                     <li>
+                        <a href="about.html">
+                        About Us
+                        </a>
+                     </li>
+                     <li>
+                        <a href="service.html">
+                        Services
+                        </a>
+                     </li>
+                     <li>
+                        <a href="contact.html">
+                        Contact
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-lg-2 col-sm-6">
+               <div class="footer-widget">
+                  <h3>Socials</h3>
+                  <!-- Links -->
+                  <ul class="list-unstyled footer-links">
+                     <li><a href="#"><i class="fab fa-facebook-f"></i>Facebook</a></li>
+                     <li>
+                        <a href="#"><i class="fab fa-twitter"></i>Twitter
+                        </a>
+                     </li>
+                     <li><a href="#"><i class="fab fa-pinterest-p"></i>Pinterest
+                        </a>
+                     </li>
+                     <li><a href="#"><i class="fab fa-linkedin"></i>linkedin
+                        </a>
+                     </li>
+                     <li><a href="#"><i class="fab fa-youtube"></i>YouTube
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!-- / .row -->
+         <div class="row text-right pt-5">
+            <div class="col-lg-12">
+               <div class="overflow-hidden">
+                  <!-- Copyright -->
+                  <p class="footer-copy">
+                     Copyright © <script>var CurrentYear = new Date().getFullYear()
+                        document.write(CurrentYear)
+                     </script>2022. Designed &amp; Developed by <a class="current-year" href="#">Unyfin</a>
+                  </p>
+               </div>
+            </div>
+         </div>
+         <!-- / .row -->
+      </div>
+      <!-- / .container -->
+      <!--  Page Scroll to Top  -->
+      <a id="scroll-to-top" class="scroll-to-top js-scroll-trigger" href="#top-header">
+      <i class="fa fa-angle-up"></i>
+      </a>
+      <!-- 
+         Essential Scripts
+         =====================================-->
+      <!-- jQuery -->
+      <script src="plugins/jquery/jquery.min.js"></script>
+      <!-- Bootstrap -->
+      <script src="plugins/bootstrap/bootstrap.min.js"></script>
+      <!-- Slick Slider -->
+      <script src="plugins/slick-carousel/slick/slick.min.js"></script>
+      <!-- Google Map -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU"></script>
+      <script src="plugins/google-map/gmap.js"></script>
+      <script src="js/checkdate.js"></script>
+      <script src="js/script.js"></script>
+      <script src="js/smtp.js"></script> 
+   </body>
+</html>

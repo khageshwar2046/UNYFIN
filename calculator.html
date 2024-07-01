@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<!--
+    // WEBSITE: https://unyfin.com
+   // FACEBOOK: https://www.facebook.com/unyfin1/
+   -->
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+	  <!-- Mobile Specific Metas
+         ================================================== -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="description" content="UNYFIN">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+      <meta name="author" content="UNYFIN">
+      <meta name="generator" content="UNYFIN">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <title>Loan Amortization Calculator</title>
+  
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="./css/bootstrap.min.css" />
+      <link rel="stylesheet" href="./css/apexcharts.css" />
+      <link rel="stylesheet" href="./css/bootstrap-datepicker.min.css" />
+      <link rel="stylesheet" href="./css/style.css" />
+	  <!-- Unyfin icon Css -->
+      <link rel="stylesheet" href="plugins/unyfinthemes-icon/css/unyfin-icons.css">
+      <!-- Main Stylesheet -->
+      <link rel="stylesheet" href="css/style.css">
+      <!-- Icon Font css -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="plugins/fontawesome/css/all.css">
+      <link rel="stylesheet" href="plugins/fonts/Pe-icon-7-stroke.css">
+      <!-- HTML to PDF -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+	  <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+   </head>
+   <script type="text/javascript">
+      function validate(){
+      	var flag = "true";
+      	var email = $('#email').val();
+      	console.log(email);
+      	if(email === ""){
+      		flag = "false";
+      		alert("Enter Email ");
+      	}
+      	//var data = "";
+      	//$("#amort_table tr:visible").each(function () {  //for each td in each visible row
+      		//console.log("val---"+$(this).html());
+      		//data += $(this).html();   //Append the td's html
+        //});
+      	if(flag == "true"){
+      		//var html = "<html><body>"+data+"</b></br>";
+      		//console.log("html---"+html);
+			var HTML_Width = $(".html-content").width();
+    	    var HTML_Height = $(".html-content").height();
+    	    var top_left_margin = 15;
+    	    var PDF_Width = HTML_Width + (top_left_margin * 2);
+    	    var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+    	    var canvas_image_width = HTML_Width;
+    	    var canvas_image_height = HTML_Height;
+
+    	    var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+    	    var pdfBase64 = "";
+    	    var imgData = "";
+    	    html2canvas($(".html-content")[0]).then(function (canvas) {
+    	        imgData = canvas.toDataURL("image/jpeg", 1.0).split(';base64,')[1];
+				
+    	        //var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+    	        //pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+    	        //for (var i = 1; i <= totalPDFPages; i++) { 
+    	            //pdf.addPage(PDF_Width, PDF_Height);
+    	            //pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+    	        //}
+    	        
+    	        //pdf.save("Your_PDF_Name.pdf");
+    	        //var binary = pdf.output();
+    	        //console.log(binary);
+    	        //pdfBase64 =  (binary ? btoa(binary) : "";)
+    	        //console.log(pdfBase64);
+    	        //$(".html-content").hide();
+    	        Email.send({
+  					Host: "smtp.elasticemail.com",
+  					Username : "testmailmellow@gmail.com",
+  					Password : "3D488FE39A34E0038DD64A7C3172810AEF24",
+  					port : "2525",
+  					To : email,
+  					From : "testmailmellow@gmail.com",
+  					Subject : "EMI",
+  					//Body : html,
+  					Body : "attachment",
+  					Attachments : [
+  						{
+  							name : "smtpjs.jpg",
+  							//path : "https://networkprogramming.files.wordpress.com/2017/11/smtpjs.png"
+  							data : imgData
+  						}]
+  				})
+  				.then(function(message){
+  					alert(message)
+  				});
+    	    });   
+    	    $('#emailModal').modal('hide');
+      	}
+      }
+
+      function download(){
+    	  var HTML_Width = $(".html-content").width();
+    	    var HTML_Height = $(".html-content").height();
+    	    var top_left_margin = 15;
+    	    var PDF_Width = HTML_Width + (top_left_margin * 2);
+    	    var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+    	    var canvas_image_width = HTML_Width;
+    	    var canvas_image_height = HTML_Height;
+
+    	    var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+    	    html2canvas($(".html-content")[0]).then(function (canvas) {
+    	        var imgData = canvas.toDataURL("image/jpeg", 1.0);
+    	        var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+    	        pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+    	        for (var i = 1; i <= totalPDFPages; i++) { 
+    	            pdf.addPage(PDF_Width, PDF_Height);
+    	            pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+    	        }
+    	        pdf.save("Your_PDF_Name.pdf");
+    	        //$(".html-content").hide();
+    	    });          	
+      }
+
+      function mail(){
+    	  $("#emailModal").modal({
+				show: true
+			});
+      }
+      
+   </script>
+   <body id="printable">
+      <div class="logo-bar d-none d-md-block d-lg-block bg-light">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-2">
+                  <div class="logo d-none d-lg-block">
+                     <!-- Brand -->
+                     <a class="navbar-brand js-scroll-trigger" href="index.html">
+                        <h2><img class="logo logo-light" alt="UnyFin" src="images/logo_medium.png" /></h2>
+                     </a>
+                  </div>
+               </div>
+               <div class="col-lg-8 justify-content-end ml-lg-auto d-flex col-12 col-md-12 justify-content-md-center">
+                  <div class="top-info-block d-inline-flex">
+                     <div class="icon-block">
+                        <i class="ti-mobile"></i>
+                     </div>
+                     <div class="info-block">
+                        <h5 class="font-weight-500">7290 87 88 89</h5>
+                        <p>Call Free</p>
+                     </div>
+                  </div>
+                  <div class="top-info-block d-inline-flex">
+                     <div class="icon-block">
+                        <i class="ti-email"></i>
+                     </div>
+                     <div class="info-block">
+                        <h5 class="font-weight-500">reachus@unyfin.com</h5>
+                        <p>Email Us</p>
+                     </div>
+                  </div>
+                  <div class="top-info-block d-inline-flex">
+                     <div class="icon-block">
+                        <i class="ti-time"></i>
+                     </div>
+                     <div class="info-block">
+                        <h5 class="font-weight-500">Mon-Sat 10AM-7PM </h5>
+                        <p>Sunday Closed</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- NAVBAR
+         ================================================= -->
+      <div class="main-navigation" id="mainmenu-area">
+         <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary main-nav navbar-togglable rounded-radius">
+               <a class="navbar-brand d-lg-none d-block" href="index.html">
+                  <h4 class="h3 mb-0">UNYFIN</h4>
+               </a>
+               <!-- Toggler -->
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                  aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="fa fa-bars"></span>
+               </button>
+               <!-- Collapse -->
+               <div class="collapse navbar-collapse has-dropdown" id="navbarCollapse">
+                  <!-- Links -->
+                  <ul class="navbar-nav ">
+                     <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="index.html">
+                        Home
+                        </a>
+                     </li>
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#!" id="navbarWelcome" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                        Products
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarWelcome">
+                           <li><a class="dropdown-item" href="PERSONALLOAN.html">Personal loans</a></li>
+                           <li><a class="dropdown-item" href="PersonalLoanOverdraft.html">Personal Loan Overdraft Facility</a></li>
+                           <li class="dropdown dropdown-submenu dropright">
+                              <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Credit cards</a>
+                              <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">AXIS</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="AXISNEO.html">Axis Bank Neo Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="AXIXMYZONE.html">Axis Bank MY ZONE Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="AXISSELECT.html">Axis Bank SELECT Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="AXIXINDIANOIL.html">IndianOil Axis Bank Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CITI</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="CITIBANKREWARDS.html">Citi Rewards Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="CITICASHBACKCARD.html">Citi Cashback Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="CITIINDIANOILCARD.html">Indianoil Citi Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="CITIPRESTIGECARD.html">Citi Prestige Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">INDUSIND</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="INDUSIND.html">Indusind Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="EazyDinerIndusInd.html">Indusind EazyDiner Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SBI</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="SBICARDSIMPLYSAVE.html">SBI Simply Save Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBIPRIMECARD.html">SBI Prime Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBISIMPLYCLICK.html">SBI Simply Click Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBIELITECARD.html">SBI Elite Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="SBIIRCTCCARD.html">SBI IRCTC Platinum Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                                 <li class="dropdown dropdown-submenu dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">YES BANK</a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown0301">
+                                       <li><a class="dropdown-item" href="YESBANKPROSPERITYPLUS.html">Yes Prosperity Rewards Plus Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="YESPROSPERITYEDGECREDIT.html">Yes Prosperity Edge Credit Card</a></li>
+                                       <li><a class="dropdown-item" href="YESBANKPREMIA.html">YES Premia Credit Card</a></li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                          <li><a class="dropdown-item" href="PERSONALLOAN.html">Business loans</a></li>
+                        </ul>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="calculator.html" class="nav-link js-scroll-trigger">
+                        Calculator
+                        </a>
+                     </li>
+					 <li class="nav-item ">
+                        <a href="Eligibility.html" class="nav-link js-scroll-trigger">
+                        Customer Eligibility
+                        </a>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="service.html" class="nav-link js-scroll-trigger">
+                        About
+                        </a>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="service.html" class="nav-link js-scroll-trigger">
+                        Services
+                        </a>
+                     </li>
+                     <li class="nav-item ">
+                        <a href="contact.html" class="nav-link">
+                        Contact
+                        </a>
+                     </li>
+                  </ul>
+                  <ul class="ml-lg-auto list-unstyled m-0">
+                     <li><a href="Quote.html" class="btn btn-white btn-circled">Get a quote</a></li>
+                  </ul>
+               </div>
+               <!-- / .navbar-collapse -->
+            </nav>
+         </div>
+         <!-- / .container -->
+      </div>
+      <br><br><br>
+      <div class="container">
+		<h2 class="display-4 text-center">Loan Amortization Planner 
+		<a href="javascript:download()"><i class="fa fa-download" title="download"></i></a>
+		<a href="javascript:mail()"><i class="fa fa-envelope" title="email"></i></a>
+		<a href="javascript:whatsapp()"><i class="fa fa-whatsapp" title="whatsapp"></i></a>
+		</h2>
+         <div class="pl_emi_cal_table" style="margin-top:15px;">
+            <table  id="rateTable" style=' clear: both;    background: none repeat scroll 0 0 #FCFCFC; margin: 0 0 20px 0;   text-align: center; ' width="100%">
+               <tr>
+                  <td  height="20"  style='border: 1px solid #DBDAD7;background: #4572A7;	border-top: 0; width:150px; color:#FFFFFF;'>Bank Name</td>
+                  <td  align="center" style='border: 1px solid #DBDAD7;background: #4572A7;	border-top: 0; width:150px; color:#FFFFFF;'>Rate of Interest</td>
+                  <td   style='border: 1px solid #DBDAD7; background: #4572A7;	border-top: 0; width:210px; color:#FFFFFF;' >
+                     <div id="intr_text" align="center"><span style="width:170px;" align="center">Processing Fee</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Yes Bank</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.99% - 16.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>upto 2%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Kotak Mahindra Bank</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.75% - 16.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>Rs.999 - 2%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">HDFC Bank</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.75% - 15.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>upto 3999+GST</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">IDFC First</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.75% - 21.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>upto 9999</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">ICICI Bank</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.75% - 17.50%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>0.50% - 2.25%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Standard Chartered</td>
+                  <td align="center"  class="default_td" style="height: 18px">11.00% - 12.50%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>1%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Tata Capital</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.75% - 16.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>1.25% - 2.50%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Fullerton India</td>
+                  <td align="center"  class="default_td" style="height: 18px">11.99% - 26.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>2.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Bajaj Finserv</td>
+                  <td align="center"  class="default_td" style="height: 18px">13.75% - 16.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>upto 2.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Indus Ind Bank</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.50% - 16.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>upto 50% off*</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Axis Bank</td>
+                  <td align="center"  class="default_td" style="height: 18px">10.75% - 16.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>2.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Finnable</td>
+                  <td align="center"  class="default_td" style="height: 18px">16.00% - 22.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>2.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Hero</td>
+                  <td align="center"  class="default_td" style="height: 18px">14.00% - 20.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>2.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">InCred</td>
+                  <td align="center"  class="default_td" style="height: 18px">14.00% - 20.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>1.75%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Muthoot</td>
+                  <td align="center"  class="default_td" style="height: 18px">14.00% - 20.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>2.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">PaySense</td>
+                  <td align="center"  class="default_td" style="height: 18px">18.00% - 24.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>3.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Stashfin PL</td>
+                  <td align="center"  class="default_td" style="height: 18px">22.00% - 28.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>3.00%</span></div>
+                  </td>
+               </tr>
+               <tr>
+                  <td align="center"   class="default_td" style="height: 18px">Aditya Birla</td>
+                  <td align="center"  class="default_td" style="height: 18px">14.00% - 20.00%</td>
+                  <td align="center"  class="default_td" style="height: 18px">
+                     <div id="hdfc_bnk"><span>2.00%</span></div>
+                  </td>
+               </tr>
+            </table>
+         </div>
+<script src="amort1.js"></script>
+<style>
+div, h4,p  { margin: 0; padding: 0; border: 0; outline: 0; font: 13px Arial, Helvetica, sans-serif;    color: #00000;}
+#emisum { background: none repeat scroll 0pt 0pt #fcfcfc; clear: both; float: left; width: 240px; margin: 0pt 10px 20px 0pt; border: 5px solid #547295; height: 240px; }
+#emisum div { margin: 0pt 0pt 16px; padding: 10px 10px 0pt; text-align: center; width: 220px; border-top: 1px dotted rgb(147, 79, 79); }
+#emisum h4 { color: #934f4f; font-weight: bold; }
+#emisum p { font-size: 18px; font-weight: bold; margin: 0pt auto; }
+#emisum span { padding-left: 5px; }
+#emiamount { border-top: 0pt none ! important; }
+#emiamount p { font-size: 24px; }
+.common-comment-wrapper{ width:970px; margin:auto;}
+
+.emi_right_box{ float:left; width:340px; border:5px solid #547295;}
+.emi_sum_amount{ float:left; padding:5px; width:228px; }
+.emi_sum_value{ float:right; padding:5px; font-size:13px; font-weight:bold; width:90px;}
+.default_td
+ {
+ border: 1px solid #DBDAD7;background: #fffff; border-top: 0; font: 11px Arial, Helvetica, sans-serif;}
+ 
+ @media screen and (max-width: 768px) {
+ .common-comment-wrapper{ width:100%; margin:auto; display:none!important;}
+ }
+</style>
+<link href="css/cont_calc.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+
+function get_round(X) { return Math.round(X*100)/100 }
+function showpay() {
+ if ((document.calc.Loan_Amount.value == null || document.calc.Loan_Amount.value.length == 0) ||
+     (document.calc.months.value == null || document.calc.months.value.length == 0)
+||
+     (document.calc.rate.value == null || document.calc.rate.value.length == 0))
+ { document.calc.pay.value = "Incomplete data";
+document.calc.tot_amount.value = "Incomplete data";
+document.calc.tot_interest.value = "Incomplete data";
+document.calc.yearly_interest.value = "Incomplete data";
+document.calc.interest_pa.value = "Incomplete data";
+document.calc.interest_pm.value = "Incomplete data";
+ }
+ else
+ {
+ var princ = document.calc.Loan_Amount.value;
+ var term  = document.calc.months.value;
+ var intr   = document.calc.rate.value / 1200;
+ var yrs   = document.calc.months.value / 12;
+ var exactintr   = document.calc.rate.value;
+ document.calc.pay.value = get_round(princ * intr / (1 - (Math.pow(1/(1 + intr), term))));
+ document.calc.tot_amount.value = get_round(document.calc.pay.value * term);
+ document.calc.tot_interest.value = get_round(document.calc.tot_amount.value - princ);
+ document.calc.yearly_interest.value = get_round(document.calc.tot_interest.value / yrs);
+ document.calc.interest_pa.value = get_round(document.calc.yearly_interest.value / princ * 100);
+ document.calc.interest_pm.value = get_round((document.calc.yearly_interest.value / princ * 100)/12);
+ commitData(princ,exactintr,term);
+ displayBarChart (princ,exactintr,term);
+ var smpl_rsltdv = document.getElementById('smpl_rslt');
+	smpl_rsltdv.innerHTML = 'Yearly Calculated Values';
+ }
+}
+
+function displayBarChart (loanAmount,intRate,numPay)
+{
+	var monPmt=calcMonthly(loanAmount,numPay,intRate);
+	var finalVal = amortizePmtsCharts(loanAmount,intRate,numPay,monPmt);
+ 	
+	var principalAxis = [];
+	principalAxis = finalVal[0];
+	var intrAxis = finalVal[1];
+	var catxAxis = finalVal[2];
+		var sWidth = screen.width;
+var totWidth;
+var totHeight;
+if(sWidth>680) { totWidth = 400; totHeight = 450; } else { totWidth = 250; totHeight = 300; }
+	
+ chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'barChart',
+                type: 'bar',
+				 width: totWidth,
+				height:totHeight
+            },
+            title: {
+                text: false
+            },
+            xAxis: {
+                categories: catxAxis, labels:{rotation:-25}
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Principal + Interest'
+                }
+            },
+            legend: {
+                backgroundColor: '#FFFFFF',
+                reversed: true
+            },
+            tooltip: {
+                formatter: function() {
+                    return ''+
+                        this.series.name +': '+ number_format(this.y) +'';
+                }
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+                series: [{
+                name: 'Principal',
+                data: principalAxis
+            }, {
+               name: 'Interest',
+               data: intrAxis
+            }]
+        });
+}	
+$(function () {
+    var chart;
+	var sWidth = screen.width;
+	var totWidth;
+	var totHeight;
+	if(sWidth>680) { totWidth = 400; totHeight = 450; } else { totWidth = 250; totHeight = 300; }
+    $(document).ready(function() {
+	var catxAxis = new Array('Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Year 7','Year 8','Year 9','Year 10','Year 11','Year 12','Year 13','Year 14','Year 15','Year 16','Year 17','Year 18','Year 19','Year 20');
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'barChart',
+                type: 'bar',
+			    width: totWidth,
+				height:totHeight
+            },
+            title: {
+                text:false
+            },
+            xAxis: {
+                categories: catxAxis, labels:{rotation:-25}
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Principal + Interest'
+                }
+            },
+            legend: {
+
+                backgroundColor: '#FFFFFF',
+                reversed: true
+            },
+            tooltip: {
+                formatter: function() {
+                    return ''+
+                        this.series.name +': '+ number_format(this.y) +'';
+                }
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+                series: [{
+                name: 'Principal',
+                data: [31083, 34509, 38311, 42537, 47221, 52426, 58203, 64618, 71740, 79644, 88422, 98165, 108983, 120994, 134327, 149132, 165567, 183812, 204069, 226407]
+            }, {
+               name: 'Interest',
+                data: [208533, 205107, 201305, 197079, 192395, 187190, 181413, 174998, 167876, 159972, 151194, 141451, 130633, 118622, 105289, 90484, 74049, 55804, 35547, 13056]
+            }]
+        });
+    });
+    
+});
+
+</script>
+<style type="text/css"> .btnclr {  background-color: #FF5733;    border: medium none;    color: #FFFFFF;    font-family: Verdana,Arial,Helvetica,sans-serif;    font-size: 12px;    font-weight: bold;    height: 30px;    width: 90px; } </style>
+</head>
+<body>
+
+<script src="https://www.UNYFIN.COM/js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    var jqc = jQuery.noConflict();
+    jqc(document).ready(function () {
+        jqc(".bodyoverlay").each(function () {
+            jqc(this).click(function () {
+                if (jqc(".overlay-bg").is(':visible') && jqc(this).children('.dropdown-menu').is(':visible')) {
+                    jqc(".overlay-bg").fadeOut(100);
+                } else {
+                    jqc(".overlay-bg").fadeIn(100);
+                }
+            });
+        });
+        jqc('html').on('mouseup', function () {
+            jqc(".overlay-bg").fadeOut(100);
+        });
+    });
+</script>
+<div class="navigation-bar">
+
+<div style="clear:both;"></div>
+<div class="intrl_txt" style="margin-top:25px;">
+<div class="left_wrap-mob" ><div class="emi_head_text_box_a" style="width:100%;">
+    <h1 class="text3"  style=" height:33; margin-top:0px; float:left; clear:right; font-size:28px; text-transform:none; color:#000;">EMI Calculator</h1><div style="clear:both;"></div><span style="font-size:12px; margin-bottom:0px; font-weight:bold;">Change Loan Amount, Interest Rate &amp; Tenure for your calculation </span></div><div style="clear:both;"></div>
+    
+   
+<div class="emi_left_box_mobo">
+  
+<div class="emi_form_box_mobo">
+ <form method="post" name="calc" id="calc"><table width="90%" border="0" align="center" cellpadding="0" cellspacing="4">
+      
+      <tr>
+        <td width="41%" height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; "  ><b>Loan Amount</b></td>
+        <td width="59%"><input name='Loan_Amount' type='text' class="input_box_cal" id='Loan_Amount' onblur="getDigitToWords('Loan_Amount','formatedlA','wordloanAmount');" onkeypress="getDigitToWords('Loan_Amount','formatedlA','wordloanAmount');"  onkeydown="getDigitToWords('Loan_Amount','formatedlA','wordloanAmount');"     onkeyup="intOnly(this);getDigitToWords('Loan_Amount','formatedlA','wordloanAmount');" value='2000000' maxlength='9' />	<br> 	<span id='formatedlA' style='font-size:11px; font-weight:normal; color:#ffffff;font-Family:Verdana;'> 	
+Rs. 20,00,000 <br /></span><span id='wordloanAmount' style='font-size:11px; font-weight:normal; color:#ffffff;font-Family:Verdana;text-transform: capitalize;'>Rs. twenty lakh(s).</span></td>
+      </tr>
+     
+           <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " ><b>Interest Rate (Reducing) </b></td>
+        <td class="text" style="  color:#FFF; font-size:13px; "><input name='rate' type='text' class="input_box_cal" value='10.5' maxlength='5' />
+        % Per Annum </td>
+      </tr>
+	   <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; "   ><b> Loan Tenure</b> </td>
+        <td class="text" style="  color:#FFF; font-size:13px; "><input name='months' type='text' class="input_box_cal" value='240' maxlength='10'  /> (in Months)</td>
+      </tr>
+            <tr>
+        <td height="35" colspan="2" align="center" valign="middle" class="text" style="  color:#FFF; font-size:11px; font-weight:normal;" >
+        <input name="button" type="button" class="btnclr" onclick='showpay()' value="Calculate" />
+      &nbsp;&nbsp;<input name="reset" type="reset" class="btnclr" value="Reset" /></td>
+        </tr>
+         <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " >Calculated Monthly EMI</td>
+        <td>
+        <input name="pay" type="text" class="input_box_cal"  value="19967.6" readonly/>
+           </td>
+      </tr>
+         <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " ><b>Total Amount with Interest</b></td>
+        <td> <input name="tot_amount" type="text" class="input_box_cal"  value="4792224" readonly/></td>
+      </tr>
+         <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " ><b>Flat Interest Rate PA</b></td>
+        <td> <input name="interest_pa" type="text" class="input_box_cal"  value="6.98" readonly/></td>
+      </tr>
+         <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " ><b>Flat Interest Rate PM</b></td>
+        <td> <input name="interest_pm" type="text" class="input_box_cal"  value="0.58" readonly/></td>
+      </tr>
+         <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " ><b>Total Interest Amount</b></td>
+        <td> <input name="tot_interest" type="text" class="input_box_cal"  value="2792224" readonly/></td>
+      </tr>
+         <tr>
+        <td height="35" align="left" valign="middle" class="text" style="  color:#FFF; font-size:13px; " ><b>Yearly Interest Amount</b></td>
+        <td><input name='yearly_interest' type='text' class="input_box_cal" style=' font-weight:bold; font-size:11px; color:#373737; ' value="139611.2" readonly /></td>
+      </tr>
+  </table>
+ </form>
+ 
+ </div>
+ <div class="responsive_ad" align="center"><br />
+
+ </div>
+ <div align="left">
+
+ <div align="right" style="width:200px; float:right; margin-top:7px;">
+<!-- Place this tag in your head or just before your close body tag. -->
+<div style="width:70px; float:left;"><script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
+
+</div>
+  
+  </div>
+  <div style="clear:both;"></div>
+<table align="center" width="100%">
+<tr>
+<td align="center" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#4572A7; font-weight:bold;">
+<tr><td align="center"><div id="barChart"></div></td></tr>
+</table></div><div style="clear:both;"></div>
+</div>
+<div style="clear:both;"></div>
+<div  class="emi_mobo_content_txt_c">
+<div style="width:100%;text-align:justify;"><h3 style="text-align: justify;"><em></em></h3></div>
+</tbody>
+</table>
+</div>
+<br />
+
+<p style="text-align: justify;"><b></p>
+
+
+    </div>
+</div>
+<div class="rihgt_wrap-mob"  ><script  type="text/javascript">
+function validateDiv(div)
+{
+	var ni1 = document.getElementById(div);
+	ni1.innerHTML = '';
+}
+
+function validmobile(phone) 
+{
+	atPos = phone.indexOf("0")// there must be one "@" symbol
+	if (atPos == 0) 
+	{
+		alert("Mobile number cannot start with 0.");
+		return false;
+	}
+	if(!checkData(document.loan_form.mobile, 'Mobile number', 10))
+		return false;
+
+return true;
+}
+function chkformR()
+{
+var regMail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9])+$/
+var dt,mdate;dt=new Date();
+
+var alpha=/^[a-zA-Z\ ]*$/;
+var alphanum=/^[a-zA-Z0-9]*$/;
+var num=/^[0-9]*$/;
+var space=/^[\ ]*$/;
+var iChars ="/@#$%^&*()+=-[]\\\';,.{}|\":<>?!";
+
+ if (document.loan_form.Type_Loan.selectedIndex==0)
+	{
+		document.getElementById('productRVal').innerHTML = "<span  class='hintanchorqa'>Select Product</span>";	
+		document.loan_form.Type_Loan.focus();
+		return false;
+	}
+	if(document.loan_form.fullname.value=="")
+	{
+		document.getElementById('nameRVal').innerHTML = "<span  class='hintanchorqa'>Fill Your Name.</span>";	
+		document.loan_form.fullname.focus();
+		return false;
+	}
+ 
+  if(document.loan_form.mobile.value=="")
+	{
+		document.getElementById('phoneRVal').innerHTML = "<span  class='hintanchorqa'>Fill Mobile Number.</span>";	
+		document.loan_form.mobile.focus();
+		return false;
+	}
+	  if(isNaN(document.loan_form.mobile.value)|| document.loan_form.mobile.value.indexOf(" ")!=-1)
+		{
+			document.getElementById('phoneRVal').innerHTML = "<span  class='hintanchorqa'>Fill Mobile Number.</span>";	
+            alert("Enter numeric value");
+			  document.loan_form.mobile.focus();
+			  return false;  
+		}
+        if (document.loan_form.mobile.value.length < 10 )
+		{
+                alert("Please Enter 10 Digits"); 
+				 document.loan_form.mobile.focus();
+				return false;
+        }
+        if ((document.loan_form.mobile.value.charAt(0)!="9") && (document.loan_form.mobile.value.charAt(0)!="8") && (document.loan_form.mobile.value.charAt(0)!="7"))
+		{
+                alert("The number should start only with 9 or 8 or 7");
+				 document.loan_form.mobile.focus();
+                return false;
+		}
+	if(document.loan_form.email_id.value=="")
+	{
+		document.getElementById('emailRVal').innerHTML = "<span  class='hintanchorqa'>Enter  Email Address!</span>";	
+		document.loan_form.email_id.focus();
+		return false;
+	}
+	
+	var str=document.loan_form.email_id.value
+	var aa=str.indexOf("@")
+	var bb=str.indexOf(".")
+	var cc=str.charAt(aa)
+
+	if(aa==-1)
+	{
+		document.getElementById('emailRVal').innerHTML = "<span  class='hintanchorqa'>Enter Valid Email Address!</span>";	
+		document.loan_form.email_id.focus();
+		return false;
+	}
+	else if(bb==-1)
+	{
+		document.getElementById('emailRVal').innerHTML = "<span  class='hintanchorqa'>Enter Valid Email Address!</span>";	
+		document.loan_form.email_id.focus();
+		return false;
+	}
+	
+	if (document.loan_form.city.selectedIndex==0)
+	{
+		document.getElementById('cityRVal').innerHTML = "<span class='hintanchorqa'>Please Select City!</span>";
+		document.loan_form.city.focus();
+		return false;
+	}
+	if(document.loan_form.net_salary.value=="")
+	{
+		document.getElementById('netSalaryRVal').innerHTML = "<span class='hintanchorqa'>Fill your Net salary (Yearly)!</span>";
+		document.loan_form.net_salary.focus();
+		return false;
+	}
+	if(document.loan_form.net_salary.value<=0)
+	{
+		document.getElementById('netSalaryRVal').innerHTML = "<span class='hintanchorqa'>Fill Your Net Salary (Yearly)!</span>";
+		document.loan_form.net_salary.focus();
+		return false;
+	}
+if(!document.loan_form.accept.checked)
+	{
+		document.getElementById('acceptRVal').innerHTML = "<span class='hintanchorqa'>Accept the Terms and Condition!</span>";	
+		document.loan_form.accept.focus();
+		return false;
+	}
+}
+function containsdigit(param)
+{
+	mystrLen = param.length;
+	for(i=0;i<mystrLen;i++)
+	{
+		if((param.charAt(i)=="0") || (param.charAt(i)=="1") || (param.charAt(i)=="2") || (param.charAt(i)=="3") || (param.charAt(i)=="4") || (param.charAt(i)=="5") || (param.charAt(i)=="6") || (param.charAt(i)=="7") || (param.charAt(i)=="8") || (param.charAt(i)=="9") || (param.charAt(i)=="/"))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+</script>
+
+<div style="float:right; clear:right; background-color:#dde4e9; width:300px;  margin-top:5px;">
+<div class="text3" style="width:300px; margin:auto; height:auto; font-size:11px; color:#88a943; margin-top:0px;">
+<table align="center">
+<tr><td align="center" style="color:#000000;"><div id="smpl_rslt" style="size:16px; margin-bottom:2px; font-weight:bold;"><span >Yearly Sample Results</span></div></td></tr>
+<tr>
+<td align="left"><div id="tblpaymentsDetails" align="center" style="color:#000000;"><table align="center" cellpadding="0" cellspacing="0" width="300">
+  <tr>
+  <td align="left">
+ <table id='pmtTab' style='clear: both;    background: none repeat scroll 0 0 #FCFCFC; margin: 0 0 20px 0;   text-align: center; ' width="300">  <tr >
+      <td  height="20"  style='border: 1px solid #DBDAD7;background: #4572A7;	border-top: 0; width:90px; font: 12px Arial, Helvetica, sans-serif; color:#FFFFFF;' id='numHead'>Year</td>
+      <td  height="20"  style='border: 1px solid #DBDAD7;background: #4572A7;	border-top: 0; width:110px; font: 12px Arial, Helvetica, sans-serif; color:#FFFFFF;' id='oldBal'>Principal</td>
+      <td  align="center" style='border: 1px solid #DBDAD7;background: #4572A7;	border-top: 0; width:110px; font: 12px Arial, Helvetica, sans-serif; color:#FFFFFF;' id='pt'>Interest</td>
+      <td   style='border: 1px solid #DBDAD7; background: #4572A7;	border-top: 0; width:210px; font: 12px Arial, Helvetica, sans-serif; color:#FFFFFF;'id='oil' >Balance Amount</td>
+    </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">1</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 31,083</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 208,533</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 1,968,917</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">2</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 34,509</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 205,107</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 1,934,408</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">3</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 38,311</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 201,305</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 1,896,097</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">4</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 42,537</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 197,079</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,853,560</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">5</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 47,221</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 192,395</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,806,339</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">6</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 52,426</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 187,190</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,753,913</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">7</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 58,203</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 181,413</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,695,710</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">8</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 64,618</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 174,998</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,631,092</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">9</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 71,740</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 167,876</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,559,352</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">10</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 79,644</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 159,972</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,479,708</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">11</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 88,422</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 151,194</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,391,286</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">12</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 98,165</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 141,451</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,293,121</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">13</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 108,983</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 130,633</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,184,138</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">14</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 120,994</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 118,622</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 1,063,144</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">15</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 134,327</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 105,289</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 928,817</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">16</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 149,132</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 90,484</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 779,685</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">17</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 165,567</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 74,049</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 614,118</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">18</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 183,812</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 55,804</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 430,306</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">19</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 204,069</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 35,547</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 226,237</td>
+  </tr>
+  <tr>
+    <td height="18" align="center" width="64"  class="default_td">20</td>
+    <td height="18" align="center" width="64"  class="default_td">Rs. 226,407</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 13,056</td>
+   <td height="18" align="center" width="64"  class="default_td">Rs. 0</td>
+  </tr>
+  </table>
+  </td></tr></table></div></td>
+</tr>
+
+</table>
+<div class="emi_aply_block">
+<form name="loan_form" method="post" action="/Right.php" onSubmit="return chkformR();">
+<table width="200" border="0" cellspacing="0" cellpadding="0" align="center">
+<tr>
+	<td height="10" align="center" valign="top"><img src="images/bgtopr.jpg" width="270" height="10" /></td>
+</tr>
+<tr>
+	<td align="left" valign="top" ><table border="0" cellpadding="0" cellspacing="0" >
+<tr>
+	
+	<td  align="left" valign="top" width="270" bgcolor="#21405F">
+		<div class="emi_aply_block"><table width="270" border="0" cellpadding="0" cellspacing="3" align="center">
+		<tr>
+			<td align="left" valign="top" colspan="2" style=" color:#FFF; font-size:18px;  text-align:center; ">
+				
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-1312775-8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-1312775-8');
+</script>		 
+      <script src="./js/jquery-3.2.1.slim.min.js"></script>
+      <script src="./js/popper.min.js"></script>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/bootstrap-datepicker.min.js"></script>
+      <script src="./js/apexcharts.min.js"></script>
+      <script src="./js/app.js"></script>
+     <script src="https://smtpjs.com/v3/smtp.js"></script>
+   </body>
+</html>
